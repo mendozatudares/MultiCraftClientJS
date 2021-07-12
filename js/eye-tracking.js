@@ -15,16 +15,13 @@ function distance(a, b) {
 
 function determineDirection(leftCenter, rightCenter, keypoints) {
   // Determine direction of both eyes.
+  const leftThresh = 1.5, rightThresh = 0.75;
   const leftRatio = distance(leftCenter, keypoints[LEFT_KEYPOINTS[0]]) / distance(leftCenter, keypoints[LEFT_KEYPOINTS[1]]);
   const rightRatio = distance(rightCenter, keypoints[RIGHT_KEYPOINTS[0]]) / distance(rightCenter, keypoints[RIGHT_KEYPOINTS[1]]);
-  if (leftRatio > 1.5 && rightRatio > 1.5) {
-    console.log("left", leftRatio, rightRatio);
-  } else if (leftRatio < 0.75 && rightRatio < 0.75) {
-    console.log("right", leftRatio, rightRatio);
-  }
+  return leftRatio > leftThresh  && rightRatio > leftThresh  ? 'Left'
+       : leftRatio < rightThresh && rightRatio < rightThresh ? 'Right'
+       : 'Center';
 }
-
-
 
 let model, ctx, videoWidth, videoHeight, video, canvas,
     scatterGLHasInitialized = false, scatterGL, rafID;
@@ -110,7 +107,8 @@ async function renderPrediction() {
           // ctx.arc(rightCenter[0], rightCenter[1], 1 /* radius */, 0, 2 * Math.PI);
           // ctx.fill();
 
-          determineDirection(leftCenter, rightCenter, keypoints);
+          let direction = determineDirection(leftCenter, rightCenter, keypoints);
+          diagnostic.textContent = 'Eye Direction: ' + direction;
         }
       }
     });
