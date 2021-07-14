@@ -7,7 +7,7 @@ const LEFT_KEYPOINTS = [362, 263]
 const RIGHT_KEYPOINTS = [33, 133]
 let stopPrediction = false;
 
-var diagnostic = document.getElementById('speech-output');
+var eyeDiagnostic = document.getElementById('webcam-output');
 
 function distance(a, b) {
   return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
@@ -108,7 +108,7 @@ async function renderPrediction() {
           // ctx.fill();
 
           let direction = determineDirection(leftCenter, rightCenter, keypoints);
-          diagnostic.textContent = 'Eye Direction: ' + direction;
+          eyeDiagnostic.textContent = 'Eye Direction: ' + direction;
         }
       }
     });
@@ -131,7 +131,7 @@ async function main() {
   canvas.width = videoWidth;
   canvas.height = videoHeight;
   const canvasContainer = document.querySelector('.canvas-wrapper');
-  canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
+  canvasContainer.setAttribute('style', `width: ${videoWidth}px; height: ${videoHeight}px`);
 
   ctx = canvas.getContext('2d');
   ctx.translate(canvas.width, 0);

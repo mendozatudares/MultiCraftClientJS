@@ -15,7 +15,7 @@ recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
-var diagnostic = document.getElementById('speech-output');
+var speechDiagnostic = document.getElementById('speech-output');
 
 recognition.start();
 
@@ -29,7 +29,7 @@ recognition.onresult = function(event) {
   // The second [0] returns the SpeechRecognitionAlternative at position 0.
   // We then return the transcript property of the SpeechRecognitionAlternative object
   var result = event.results[0][0].transcript;
-  diagnostic.textContent = 'Result received: ' + result;
+  speechDiagnostic.textContent = 'Result received: ' + result;
 }
 
 recognition.onspeechend = function() {
@@ -37,7 +37,7 @@ recognition.onspeechend = function() {
 }
 
 recognition.onerror = function(event) {
-  diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+  speechDiagnostic.textContent = 'Error occurred in recognition: ' + event.error;
   console.log(event);
 }
 
