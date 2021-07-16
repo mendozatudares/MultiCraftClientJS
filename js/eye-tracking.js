@@ -18,13 +18,13 @@ function determineDirection(leftCenter, rightCenter, keypoints) {
   const leftThresh = 1.5, rightThresh = 0.75;
   const leftRatio = distance(leftCenter, keypoints[LEFT_KEYPOINTS[0]]) / distance(leftCenter, keypoints[LEFT_KEYPOINTS[1]]);
   const rightRatio = distance(rightCenter, keypoints[RIGHT_KEYPOINTS[0]]) / distance(rightCenter, keypoints[RIGHT_KEYPOINTS[1]]);
-  return leftRatio > leftThresh  && rightRatio > leftThresh  ? 'Left'
-       : leftRatio < rightThresh && rightRatio < rightThresh ? 'Right'
-       : 'Center';
+  return leftRatio > leftThresh && rightRatio > leftThresh ? 'Left'
+    : leftRatio < rightThresh && rightRatio < rightThresh ? 'Right'
+      : 'Center';
 }
 
 let model, ctx, videoWidth, videoHeight, video, canvas,
-    scatterGLHasInitialized = false, scatterGL, rafID;
+  scatterGLHasInitialized = false, scatterGL, rafID;
 const VIDEO_SIZE = 500;
 const state = {
   maxFaces: 1,
@@ -65,7 +65,7 @@ async function renderPrediction() {
     predictIrises: state.predictIrises
   });
   ctx.drawImage(
-      video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
+    video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
 
   if (predictions.length > 0) {
     predictions.forEach(prediction => {
@@ -119,7 +119,7 @@ async function renderPrediction() {
 
 async function main() {
   // await tf.setBackend(state.backend);
-  
+
   await setupCamera();
   video.play();
   videoWidth = video.videoWidth;
@@ -138,8 +138,8 @@ async function main() {
   ctx.scale(-1, 1);
 
   model = await faceLandmarksDetection.load(
-      faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-      {maxFaces: state.maxFaces});
+    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
+    { maxFaces: state.maxFaces });
   renderPrediction();
 };
 
