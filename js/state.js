@@ -7,20 +7,27 @@ var clientState = {
 };
 
 function getUUID(username) {
-  const proxy = 'https://cors-anywhere.herokuapp.com/';
-  let headers = new Headers();
-  
-  headers.append('Accept', 'application/json');
-  headers.append('Origin', window.location.origin);
+  // Permission was granted
+  // Create a new TCP client socket and connect to remote host
+  var mySocket = new TCPSocket("127.0.0.1", 6789);
 
-  fetch(`${proxy}https://api.mojang.com/users/profiles/minecraft/${username}`, {
-    method: 'GET',
-    headers: headers
-  })
-  .then(response => response.json())
-  .then(json => {
-    let i = json.id;
-    console.log(i.substr(0,8)+"-"+i.substr(8,4)+"-"+i.substr(12,4)+"-"+i.substr(16,4)+"-"+i.substr(20));
-  })
-  .catch(error => console.error(error));
+  // Send data to server
+  mySocket.writeable.write("Hello World").then(
+    () => {
+      // Data sent sucessfully, wait for response
+      console.log("Data has been sent to server");
+      mySocket.readable.getReader().read().then(
+        ({ value, done }) => {
+          if (!done) {
+            // Response received, log it:
+            console.log("Data received from server:" + value);
+          }
+
+          // Close the TCP connection
+          mySocket.close();
+        }
+      );
+    },
+    e => console.error("Sending error: ", e)
+  );
 }
