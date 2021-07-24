@@ -46,8 +46,8 @@ recognition.onerror = function (event) {
 window.onload = function () {
   window.onkeydown = function (key) {
     if (key.keyCode === 188 /* comma */) {
-      // recognition.start();
-      getUUID('MrSJlakc1337');
+      recognition.start();
+      // getUUID('MrSJlakc1337');
     }
   }
 }

@@ -12,19 +12,23 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
   <script src="https://unpkg.com/compromise"></script>
   <script src="https://unpkg.com/compromise-numbers"></script>
+  <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
+  <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
+  <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
 </head>
 
 <body>
   <p id="speech-output"><em>...diagnostic messages</em></p>
   <p id="webcam-output"><em>...diagnostic messages</em></p>
-  </div>
+  <div id="root"></div>
 
   <div class="canvas-wrapper">
     <video id="video" style="display: none;"></video>
     <canvas id="output" style="display: none;" width="500px" height="500px"></canvas>
   </div>
 
-  <script src="js/websocket.js"></script>
+  <script type="text/babel" src="js/client.js"></script>
+  <!-- <script src="js/websocket.js"></script> -->
   <!-- <script src="js/state.js"></script> -->
   <!-- <script src="js/parser.js"></script> -->
   <!-- <script src="js/speech-to-text.js"></script> -->
