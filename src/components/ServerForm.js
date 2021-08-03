@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
-function ServerForm() {
-  const [state, setState] = useState({ ip: "" });
-  console.log(state);
+function ServerForm(props) {
+  const state = props.state;
+  const setState = props.setState;
+
   const handleChange = (event) => {
     setState({ ...state, ip: event.target.value });
   };
   const handleSubmit = (event) => {
+    setState({...state, view: "username"})
     event.preventDefault();
   };
   return (

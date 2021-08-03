@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
-function TextEntry() {
-  const [state, setState] = useState({ command: "" });
-  console.log(state);
+function TextEntry(props) {
+  const state = props.state;
+  const setState = props.setState;
+
   const handleChange = (event) => {
     setState({ ...state, command: event.target.value });
   };

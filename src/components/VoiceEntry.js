@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
-function VoiceEntry() {
-  const [state, setState] = useState({ command: "" });
-  console.log(state);
+function VoiceEntry(props) {
+  const state = props.state;
+  const setState = props.setState;
+
   const handleChange = (event) => {
     setState({ ...state, command: event.target.value });
   };

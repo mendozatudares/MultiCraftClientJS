@@ -1,21 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
+import { getUser } from "../utils/websocket";
 
-function UsernameForm() {
-  const [state, setState] = useState({ username: "", uuid: "" });
-  console.log(state);
+function UsernameForm(props) {
+  const state = props.state;
+  const setState = props.setState;
 
   const handleChange = (event) => {
     setState({ ...state, username: event.target.value });
   };
   const handleSubmit = (event) => {
-    fetch(
-      `https://cors-anywhere.herokuapp.com/https://api.mojang.com/users/profiles/minecraft/${state.username}`
-    )
-      .then((response) => response.json())
-      .then((data) => setState({ ...state, uuid: data.id }))
-      .catch((err) =>
-        console.error(`Error fetching uuid for ${state.username}:\n\t${err}`)
-      );
+    getUser(state.ip, state.username, (data) => {
+      setState({ ...state, username: data.name, uuid: data.id, view: "text" });
+    });
     event.preventDefault();
   };
   return (
