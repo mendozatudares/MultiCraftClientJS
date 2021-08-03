@@ -9,7 +9,7 @@ function UsernameForm(props) {
     setState({ ...state, username: event.target.value });
   };
   const handleSubmit = (event) => {
-    getUser(state.ip, state.username, (data) => {
+    getUser(state.ip, state.port, state.username, (data) => {
       setState({ ...state, username: data.name, uuid: data.id, view: "text" });
     });
     event.preventDefault();

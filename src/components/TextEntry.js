@@ -10,11 +10,12 @@ function TextEntry(props) {
     setState({ ...state, command: event.target.value });
   };
   const handleSubmit = (event) => {
-    sendCommand(state.ip, state.uuid, processInstruction(state.command));
+    sendCommand(state.ip, state.port, state.uuid, processInstruction(state.command));
     event.preventDefault();
   };
   return (
     <div>
+      <label>Username: {state.username}</label>
       <form onSubmit={handleSubmit}>
         <label>
           Text Command

@@ -1,4 +1,4 @@
-function getUser(ip, port=5005, username, callback) {
+function getUser(ip, port, username, callback) {
   const socket = new WebSocket(`ws://${ip}:${port}`);
 
   socket.onopen = function (e) {
@@ -28,7 +28,7 @@ function getUser(ip, port=5005, username, callback) {
   };
 }
 
-function sendCommand(ip, port=5005, uuid, command, callback) {
+function sendCommand(ip, port, uuid, command, callback) {
   const socket = new WebSocket(`ws://${ip}:${port}`);
 
   socket.onopen = function (e) {
