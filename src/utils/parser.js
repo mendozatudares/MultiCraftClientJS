@@ -21,7 +21,7 @@ class GameCommand {
 
 GameCommand.prototype.getGameCommandArgs = function () {
   var command = this.command;
-  if (command.length != 0 && command in COMMANDS) {
+  if (command.length !== 0 && command in COMMANDS) {
     if (command !== "undo" && command !== "redo") {
       switch (command) {
         case "build":
@@ -92,11 +92,11 @@ GameCommand.prototype.getBuildArgs = function () {
 
   // Validate configurations of build shape and dimensions
   var dimensions = this.getDimensions();
-  if (("wall" in this.args || "roof" in this.args) && dimensions.length == 2) {
+  if (("wall" in this.args || "roof" in this.args) && dimensions.length === 2) {
     dimensions.push(0);
   } else if (
     dimensions.length < 3 &&
-    !("sphere" in this.args && dimensions.length == 1)
+    !("sphere" in this.args && dimensions.length === 1)
   ) {
     return;
   }
@@ -129,7 +129,7 @@ GameCommand.prototype.getPlaceArgs = function () {
 GameCommand.prototype.getMoveArgs = function () {
   // Get movement amount, default to 1
   var dimensions = this.getDimensions();
-  this.args.dimensions = dimensions.length != 0 ? dimensions[0] : 1;
+  this.args.dimensions = dimensions.length !== 0 ? dimensions[0] : 1;
 
   // Set movement direction. If direction was not defined, default to 'forward'
   this.setDirection();
@@ -156,7 +156,7 @@ GameCommand.prototype.getLookArgs = function () {
   var defaultDegrees = this.command === "turn" ? 90 : 45;
   let dimensions = this.getDimensions();
   this.args.dimensions =
-    dimensions.length != 0 ? dimensions[0] : defaultDegrees;
+    dimensions.length !== 0 ? dimensions[0] : defaultDegrees;
 
   this.isValid = true;
 };
