@@ -3,8 +3,8 @@ const NUM_IRIS_KEYPOINTS = 5;
 const GREEN = '#32EEDB';
 const RED = '#FF2C35';
 const BLUE = '#157AB3';
-const LEFT_KEYPOINTS = [362, 263]
-const RIGHT_KEYPOINTS = [33, 133]
+const LEFT_KEYPOINTS = [362, 263];
+const RIGHT_KEYPOINTS = [33, 133];
 let stopPrediction = false;
 
 var eyeDiagnostic = document.getElementById('webcam-output');
