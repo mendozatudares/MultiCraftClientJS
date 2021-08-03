@@ -3,8 +3,8 @@ const NUM_IRIS_KEYPOINTS = 5;
 const GREEN = '#32EEDB';
 const RED = '#FF2C35';
 const BLUE = '#157AB3';
-const LEFT_KEYPOINTS = [362, 263]
-const RIGHT_KEYPOINTS = [33, 133]
+const LEFT_KEYPOINTS = [362, 263];
+const RIGHT_KEYPOINTS = [33, 133];
 let stopPrediction = false;
 
 var eyeDiagnostic = document.getElementById('webcam-output');
@@ -127,15 +127,15 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  canvas = document.getElementById('output');
-  canvas.width = videoWidth;
-  canvas.height = videoHeight;
-  const canvasContainer = document.querySelector('.canvas-wrapper');
-  canvasContainer.setAttribute('style', `width: ${videoWidth}px; height: ${videoHeight}px`);
+  // canvas = document.getElementById('output');
+  // canvas.width = videoWidth;
+  // canvas.height = videoHeight;
+  // const canvasContainer = document.querySelector('.canvas-wrapper');
+  // canvasContainer.setAttribute('style', `width: ${videoWidth}px; height: ${videoHeight}px`);
 
-  ctx = canvas.getContext('2d');
-  ctx.translate(canvas.width, 0);
-  ctx.scale(-1, 1);
+  // ctx = canvas.getContext('2d');
+  // ctx.translate(canvas.width, 0);
+  // ctx.scale(-1, 1);
 
   model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
