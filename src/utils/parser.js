@@ -1,12 +1,16 @@
+import nlp from "compromise";
+import compromiseNumbers from "compromise-numbers";
+import { COMMANDS, DIRECTIONS, MATERIALS_REVERSED } from "./constants.js";
+
 nlp.extend(compromiseNumbers);
 
 class GameCommand {
   constructor(doc) {
     this.doc = doc;
     this.isValid = false;
-    this.commandText = this.doc.text('reduced');
+    this.commandText = this.doc.text("reduced");
     this.commandToken = this.commandText.split(/\s/);
-    this.command = this.commandToken.find(element => element in COMMANDS);
+    this.command = this.commandToken.find((element) => element in COMMANDS);
 
     if (this.command !== undefined) {
       this.args = { command: this.command };
@@ -18,7 +22,7 @@ class GameCommand {
 GameCommand.prototype.getGameCommandArgs = function () {
   var command = this.command;
   if (command.length != 0 && command in COMMANDS) {
-    if (command !== 'undo' && command !== 'redo') {
+    if (command !== "undo" && command !== "redo") {
       switch (command) {
         case "build":
           this.getBuildArgs();
@@ -43,48 +47,57 @@ GameCommand.prototype.getGameCommandArgs = function () {
         case "give":
           this.getGiveArgs();
           break;
+        default:
+          break;
       }
     } else {
       this.isValid = true;
     }
   }
-}
+};
 
 GameCommand.prototype.setMaterial = function () {
-  let material = MATERIALS_REVERSED.find(element => this.doc.has(element));
-  this.args.material = material !== undefined ? material.replace(/\s+/g, "_") : "stone";
-}
+  let material = MATERIALS_REVERSED.find((element) => this.doc.has(element));
+  this.args.material =
+    material !== undefined ? material.replace(/\s+/g, "_") : "stone";
+};
 
 GameCommand.prototype.setDirection = function () {
-  let direction = this.commandToken.find(element => element in DIRECTIONS);
+  let direction = this.commandToken.find((element) => element in DIRECTIONS);
   this.args.direction = DIRECTIONS[direction];
-}
+};
 
 GameCommand.prototype.getDimensions = function () {
-  return this.doc.numbers().json().map(element => {
-    return element.number;
-  });
-}
+  return this.doc
+    .numbers()
+    .json()
+    .map((element) => {
+      return element.number;
+    });
+};
 
 GameCommand.prototype.getBuildArgs = function () {
   var buildShapes = ["wall", "roof", "house", "sphere"];
   var buildShapeDetected = false;
 
   // Parse for build shape and hollow tags
-  this.commandToken.forEach(element => {
+  this.commandToken.forEach((element) => {
     if (!buildShapeDetected && buildShapes.indexOf(element) > -1) {
       buildShapeDetected = true;
       this.args[element] = true;
-    } else if (element === 'hollow') {
+    } else if (element === "hollow") {
       this.args.hollow = true;
     }
   });
 
   // Validate configurations of build shape and dimensions
   var dimensions = this.getDimensions();
-  if (('wall' in this.args || 'roof' in this.args) && dimensions.length == 2) {
+  if (("wall" in this.args || "roof" in this.args) && dimensions.length == 2) {
     dimensions.push(0);
-  } else if (dimensions.length < 3 && !('sphere' in this.args && dimensions.length == 1)) {
+  } else if (
+    dimensions.length < 3 &&
+    !("sphere" in this.args && dimensions.length == 1)
+  ) {
     return;
   }
 
@@ -93,25 +106,25 @@ GameCommand.prototype.getBuildArgs = function () {
   this.setMaterial();
 
   // If this was a track command, make it a build command with a track flag
-  if (this.command === 'track') {
-    this.args.command = 'build';
+  if (this.command === "track") {
+    this.args.command = "build";
     this.args.track = true;
   }
 
   this.isValid = true;
-}
+};
 
 GameCommand.prototype.getPlaceArgs = function () {
   this.setMaterial();
 
   // If this was a track command, make it a place command with a track flag
-  if (this.command === 'track') {
-    this.args.command = 'place';
+  if (this.command === "track") {
+    this.args.command = "place";
     this.args.track = true;
   }
 
   this.isValid = true;
-}
+};
 
 GameCommand.prototype.getMoveArgs = function () {
   // Get movement amount, default to 1
@@ -120,12 +133,12 @@ GameCommand.prototype.getMoveArgs = function () {
 
   // Set movement direction. If direction was not defined, default to 'forward'
   this.setDirection();
-  if (!('direction' in this.args)) {
+  if (!("direction" in this.args)) {
     this.args.direction = "forward";
   }
 
   this.isValid = true;
-}
+};
 
 GameCommand.prototype.getTrackArgs = function () {
   // Search for build, place, or move keywords
@@ -137,15 +150,16 @@ GameCommand.prototype.getTrackArgs = function () {
     this.args.move = true;
     this.isValid = true;
   }
-}
+};
 
 GameCommand.prototype.getLookArgs = function () {
   var defaultDegrees = this.command === "turn" ? 90 : 45;
   let dimensions = this.getDimensions();
-  this.args.dimensions = dimensions.length != 0 ? dimensions[0] : defaultDegrees;
+  this.args.dimensions =
+    dimensions.length != 0 ? dimensions[0] : defaultDegrees;
 
   this.isValid = true;
-}
+};
 
 GameCommand.prototype.getStoreArgs = function () {
   if (this.doc.has("clone")) {
@@ -154,17 +168,17 @@ GameCommand.prototype.getStoreArgs = function () {
     this.args.name = this.commandToken[this.commandToken.length - 1];
   }
 
-  if ('name' in this.args) {
+  if ("name" in this.args) {
     this.isValid = true;
   }
-}
+};
 
 GameCommand.prototype.getGiveArgs = function () {
   this.setMaterial();
   let dimensions = this.getDimensions();
-  this.args.dimensions = dimensions.length != 0 ? dimensions[0] : 1;
+  this.args.dimensions = dimensions.length !== 0 ? dimensions[0] : 1;
   this.isValid = true;
-}
+};
 
 function processInstruction(instruction) {
   let doc = nlp(instruction.toLowerCase());
@@ -172,3 +186,5 @@ function processInstruction(instruction) {
   console.log(gameCommand);
   return gameCommand.isValid ? gameCommand.args : {};
 }
+
+export { processInstruction };

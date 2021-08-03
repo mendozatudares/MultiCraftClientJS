@@ -1,4 +1,5 @@
 import React from "react";
+import { processInstruction } from "../utils/parser";
 
 function TextEntry(props) {
   const state = props.state;
@@ -8,6 +9,7 @@ function TextEntry(props) {
     setState({ ...state, command: event.target.value });
   };
   const handleSubmit = (event) => {
+    console.log(processInstruction(state.command))
     event.preventDefault();
   };
   return (
