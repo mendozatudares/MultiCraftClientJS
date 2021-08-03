@@ -1,5 +1,5 @@
-function getUser(ip, username, callback) {
-  const socket = new WebSocket(`ws://${ip}:8887`);
+function getUser(ip, port=5005, username, callback) {
+  const socket = new WebSocket(`ws://${ip}:${port}`);
 
   socket.onopen = function (e) {
     console.log("[open] Connection established");
@@ -28,12 +28,12 @@ function getUser(ip, username, callback) {
   };
 }
 
-function sendCommand(ip, uuid, command, callback) {
-  const socket = new WebSocket(`ws://${ip}:8887`);
+function sendCommand(ip, port=5005, uuid, command, callback) {
+  const socket = new WebSocket(`ws://${ip}:${port}`);
 
   socket.onopen = function (e) {
     console.log("[open] Connection established");
-    const message = {uuid: uuid, ...command};
+    const message = { client_name: uuid, ...command };
     socket.send(JSON.stringify(message));
     socket.close(1000, "Command sent");
   };
