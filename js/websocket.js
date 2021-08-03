@@ -1,9 +1,7 @@
-let socket = new WebSocket("ws://localhost:8887");
+let socket = new WebSocket("ws://165.124.181.163:5005");
 
 socket.onopen = function(e) {
     alert("[open] Connection established");
-    alert("Sending to server");
-    socket.send("My name is John\r\n");
   };
   
   socket.onmessage = function(event) {
