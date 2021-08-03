@@ -1,5 +1,6 @@
 import React from "react";
-import { processInstruction } from "../utils/parser";
+import { processInstruction } from "../utils/parser.js";
+import { sendCommand } from "../utils/websocket.js";
 
 function TextEntry(props) {
   const state = props.state;
@@ -9,7 +10,7 @@ function TextEntry(props) {
     setState({ ...state, command: event.target.value });
   };
   const handleSubmit = (event) => {
-    console.log(processInstruction(state.command))
+    sendCommand(state.ip, state.uuid, processInstruction(state.command));
     event.preventDefault();
   };
   return (

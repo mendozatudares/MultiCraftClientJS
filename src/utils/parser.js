@@ -183,7 +183,7 @@ GameCommand.prototype.getGiveArgs = function () {
 function processInstruction(instruction) {
   let doc = nlp(instruction.toLowerCase());
   var gameCommand = new GameCommand(doc);
-  console.log(gameCommand);
+  // console.log(gameCommand);
   return gameCommand.isValid ? gameCommand.args : {};
 }
 

@@ -7,7 +7,7 @@ function getUser(ip, username, callback) {
     socket.send(JSON.stringify(message));
     socket.onmessage = function (message) {
       callback(JSON.parse(message.data));
-      socket.close(1000, "Retrived uuid");
+      socket.close(1000, "Retrieved uuid");
     };
   };
 
@@ -33,12 +33,9 @@ function sendCommand(ip, uuid, command, callback) {
 
   socket.onopen = function (e) {
     console.log("[open] Connection established");
-    const message = { command: "login", uuid: uuid };
+    const message = {uuid: uuid, ...command};
     socket.send(JSON.stringify(message));
-    socket.onmessage = function (message) {
-      callback(JSON.parse(message.data).id);
-      socket.close(1000, "Retrived uuid");
-    };
+    socket.close(1000, "Command sent");
   };
 
   socket.onclose = function (event) {
