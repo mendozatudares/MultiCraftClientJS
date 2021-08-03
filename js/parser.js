@@ -52,7 +52,7 @@ GameCommand.prototype.getGameCommandArgs = function () {
 
 GameCommand.prototype.setMaterial = function () {
   let material = MATERIALS_REVERSED.find(element => this.doc.has(element));
-  this.args.material = material !== undefined ? material.split(/\s/).join("_") : "stone";
+  this.args.material = material !== undefined ? material.replace(/\s+/g, "_") : "stone";
 }
 
 GameCommand.prototype.setDirection = function () {

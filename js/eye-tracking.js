@@ -127,15 +127,15 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  canvas = document.getElementById('output');
-  canvas.width = videoWidth;
-  canvas.height = videoHeight;
-  const canvasContainer = document.querySelector('.canvas-wrapper');
-  canvasContainer.setAttribute('style', `width: ${videoWidth}px; height: ${videoHeight}px`);
+  // canvas = document.getElementById('output');
+  // canvas.width = videoWidth;
+  // canvas.height = videoHeight;
+  // const canvasContainer = document.querySelector('.canvas-wrapper');
+  // canvasContainer.setAttribute('style', `width: ${videoWidth}px; height: ${videoHeight}px`);
 
-  ctx = canvas.getContext('2d');
-  ctx.translate(canvas.width, 0);
-  ctx.scale(-1, 1);
+  // ctx = canvas.getContext('2d');
+  // ctx.translate(canvas.width, 0);
+  // ctx.scale(-1, 1);
 
   model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
