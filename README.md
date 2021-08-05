@@ -4,6 +4,10 @@ To run:
 2. In repo folder, run `npm install`
 3. To run app in browser, run `npm start`
 
+To build using webpack:
+1. Run `npm run build`
+2. Webpack will generate files in /dist
+
 
 # Getting Started with Create React App
 
