@@ -1,3 +1,10 @@
+To run:
+
+1. Install Node.js & npm: https://nodejs.org/en/download/
+2. In repo folder, run `npm install`
+3. To run app in browser, run `npm start`
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
