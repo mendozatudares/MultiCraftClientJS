@@ -11,8 +11,7 @@ function TextEntry(props) {
   };
   const handleSubmit = (event) => {
     sendCommand(
-      state.ip,
-      state.port,
+      state.websocket,
       state.uuid,
       processInstruction(state.command)
     );

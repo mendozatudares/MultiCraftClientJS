@@ -1,58 +1,24 @@
-function getUser(ip, port, username, callback) {
+function initSocket(ip, port, callback) {
   const socket = new WebSocket(`ws://${ip}:${port}`);
-
-  socket.onopen = function (e) {
-    console.log("[open] Connection established");
-    const message = { command: "login", username: username };
-    socket.send(JSON.stringify(message));
-    socket.onmessage = function (message) {
-      callback(JSON.parse(message.data));
-      socket.close(1000, "Retrieved uuid");
-    };
-  };
-
   socket.onclose = function (event) {
-    if (event.wasClean) {
-      console.log(
-        `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
-      );
-    } else {
-      // e.g. server process killed or network down
-      // event.code is usually 1006 in this case
-      console.log("[close] Connection died");
-    }
+    console.log(event.wasClean ? `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}` : "[close] Connection died");
   };
+  socket.onerror = function (error) { console.error(`[error] ${error.message}`); };
 
-  socket.onerror = function (error) {
-    console.error(`[error] ${error.message}`);
+  callback(socket);
+}
+
+function getUser(websocket, username, callback) {
+  const message = { command: "login", username: username };
+  websocket.send(JSON.stringify(message));
+  websocket.onmessage = function (message) {
+    callback(JSON.parse(message.data));
   };
 }
 
-function sendCommand(ip, port, uuid, command, callback) {
-  const socket = new WebSocket(`ws://${ip}:${port}`);
-
-  socket.onopen = function (e) {
-    console.log("[open] Connection established");
-    const message = { client_name: uuid, ...command };
-    socket.send(JSON.stringify(message));
-    socket.close(1000, "Command sent");
-  };
-
-  socket.onclose = function (event) {
-    if (event.wasClean) {
-      console.log(
-        `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
-      );
-    } else {
-      // e.g. server process killed or network down
-      // event.code is usually 1006 in this case
-      console.log("[close] Connection died");
-    }
-  };
-
-  socket.onerror = function (error) {
-    console.error(`[error] ${error.message}`);
-  };
+function sendCommand(websocket, uuid, command, callback) {
+  const message = { client_name: uuid, ...command };
+  websocket.send(JSON.stringify(message));
 }
 
-export { getUser, sendCommand };
+export { initSocket, getUser, sendCommand };

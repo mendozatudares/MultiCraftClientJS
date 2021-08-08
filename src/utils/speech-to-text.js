@@ -1,3 +1,5 @@
+import MATERIALS from "./constants.js";
+
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
@@ -45,7 +47,6 @@ window.onload = function () {
   window.onkeydown = function (key) {
     if (key.keyCode === 188 /* comma */) {
       recognition.start();
-      // getUUID('MrSJlakc1337');
     }
   }
 }

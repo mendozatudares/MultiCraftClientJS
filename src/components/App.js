@@ -6,8 +6,7 @@ import TextEntry from "./TextEntry.js";
 import VoiceEntry from "./VoiceEntry.js";
 
 function App() {
-  const [state, setState] = useState({ view: "server", ip: "localhost", port: 5005, username: "", uuid: "", command: "" });
-  console.log(state)
+  const [state, setState] = useState({ view: "server", ip: "localhost", port: 5005, username: "", uuid: "", command: "", websocket: "" });
   
   return (
     <div className="App">

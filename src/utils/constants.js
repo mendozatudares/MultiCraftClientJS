@@ -166,7 +166,8 @@ export const DIRECTIONS = {
   rearward: "back",
   rearwards: "back",
 }; // taken from wordnet
-const MATERIALS = [
+
+export const MATERIALS = [
   "acacia boat",
   "acacia button",
   "acacia door",
