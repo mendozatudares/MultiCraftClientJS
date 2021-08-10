@@ -1,6 +1,6 @@
 import React from "react";
-import { processInstruction } from "../utils/parser.js";
-import { sendCommand } from "../utils/websocket.js";
+import { processInstruction } from "../utils/parser";
+import { sendCommand } from "../utils/websocket";
 
 function TextEntry(props) {
   const state = props.state;
@@ -10,11 +10,7 @@ function TextEntry(props) {
     setState({ ...state, command: event.target.value });
   };
   const handleSubmit = (event) => {
-    sendCommand(
-      state.websocket,
-      state.uuid,
-      processInstruction(state.command)
-    );
+    sendCommand(state.websocket, state.uuid, processInstruction(state.command));
     event.preventDefault();
   };
   return (

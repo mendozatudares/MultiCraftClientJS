@@ -1,6 +1,6 @@
 import nlp from "compromise";
 import compromiseNumbers from "compromise-numbers";
-import { COMMANDS, DIRECTIONS, MATERIALS_REVERSED } from "./constants.js";
+import { COMMANDS, DIRECTIONS, MATERIALS_REVERSED } from "./constants";
 
 nlp.extend(compromiseNumbers);
 

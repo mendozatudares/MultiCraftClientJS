@@ -1,21 +1,27 @@
-import MATERIALS from "./constants.js";
+import MATERIALS from "./constants";
 
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
-var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
-var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+var SpeechRecognitionEvent =
+  SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
-var grammar = '#JSGF V1.0; grammar materials; public <material> = ' + MATERIALS.map(element => { return /\s/g.test(element) ? '"' + element + '"' : element }).join(' | ') + ' ;'
+var grammar =
+  "#JSGF V1.0; grammar materials; public <material> = " +
+  MATERIALS.map((element) => {
+    return /\s/g.test(element) ? '"' + element + '"' : element;
+  }).join(" | ") +
+  " ;";
 
 var recognition = new SpeechRecognition();
 var speechRecognitionList = new SpeechGrammarList();
 speechRecognitionList.addFromString(grammar, 1);
 recognition.grammars = speechRecognitionList;
 recognition.continuous = false;
-recognition.lang = 'en-US';
+recognition.lang = "en-US";
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
-var speechDiagnostic = document.getElementById('speech-output');
+var speechDiagnostic = document.getElementById("speech-output");
 
 recognition.start();
 
@@ -32,21 +38,22 @@ recognition.onresult = function (event) {
   speechDiagnostic.textContent = result;
   var args = processInstruction(result);
   console.log(args);
-}
+};
 
 recognition.onspeechend = function () {
   recognition.stop();
-}
+};
 
 recognition.onerror = function (event) {
-  speechDiagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+  speechDiagnostic.textContent =
+    "Error occurred in recognition: " + event.error;
   console.log(event);
-}
+};
 
 window.onload = function () {
   window.onkeydown = function (key) {
     if (key.keyCode === 188 /* comma */) {
       recognition.start();
     }
-  }
-}
+  };
+};
