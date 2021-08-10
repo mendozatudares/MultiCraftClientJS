@@ -1,5 +1,5 @@
 import React from "react";
-import { initSocket, getUser } from "../utils/websocket";
+import { getUser } from "../utils/websocket";
 
 function UsernameForm(props) {
   const state = props.state;
@@ -9,12 +9,13 @@ function UsernameForm(props) {
     setState({ ...state, username: event.target.value });
   };
   const handleSubmit = (event) => {
-    initSocket(state.ip, state.port, (socket) => {
-      socket.onopen = function () {
-        getUser(socket, state.username, (data) => {
-          setState({ ...state, username: data.name, uuid: data.id, view: "text" , websocket: socket });
-        });
-      }
+    getUser(state.websocket, state.username, (data) => {
+      setState({
+        ...state,
+        username: data.name,
+        uuid: data.id,
+        view: "text",
+      });
     });
     event.preventDefault();
   };

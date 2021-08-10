@@ -1,9 +1,18 @@
 function initSocket(ip, port, callback) {
   const socket = new WebSocket(`ws://${ip}:${port}`);
-  socket.onclose = function (event) {
-    console.log(event.wasClean ? `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}` : "[close] Connection died");
+  socket.onopen = function (event) {
+    console.log(`[OPEN ${socket.url}] Connection established`);
   };
-  socket.onerror = function (error) { console.error(`[error] ${error.message}`); };
+  socket.onclose = function (event) {
+    console.log(
+      event.wasClean
+        ? `[CLOSE ${socket.url}] Connection closed cleanly, code=${event.code}, reason=${event.reason}`
+        : `[CLOSE ${socket.url}] Connection died, code=${event.code}`
+    );
+  };
+  socket.onerror = function (error) {
+    console.error(`[ERROR ${socket.url}] ${error.message}`);
+  };
 
   callback(socket);
 }
@@ -16,7 +25,7 @@ function getUser(websocket, username, callback) {
   };
 }
 
-function sendCommand(websocket, uuid, command, callback) {
+function sendCommand(websocket, uuid, command) {
   const message = { client_name: uuid, ...command };
   websocket.send(JSON.stringify(message));
 }

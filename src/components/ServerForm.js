@@ -1,4 +1,5 @@
 import React from "react";
+import { initSocket } from "../utils/websocket";
 
 function ServerForm(props) {
   const state = props.state;
@@ -8,7 +9,13 @@ function ServerForm(props) {
     setState({ ...state, ip: event.target.value });
   };
   const handleSubmit = (event) => {
-    setState({...state, view: "username"})
+    initSocket(state.ip, state.port, (socket) => {
+      setState({
+        ...state,
+        view: "username",
+        websocket: socket,
+      });
+    });
     event.preventDefault();
   };
   return (
