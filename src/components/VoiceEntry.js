@@ -33,8 +33,9 @@ function VoiceEntry(props) {
       <label>Username: {state.username}</label>
       <label>
         Voice Command
-        <input
+        <textarea
           type="text"
+          rows={5}
           placeholder="Speak command"
           value={transcript}
           disabled={true}
