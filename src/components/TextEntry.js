@@ -21,6 +21,7 @@ function TextEntry(props) {
         <label>
           Text Command
           <input
+            autoFocus
             type="text"
             placeholder="Enter command"
             value={state.command}

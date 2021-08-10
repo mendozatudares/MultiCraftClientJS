@@ -24,6 +24,7 @@ function ServerForm(props) {
         <label>
           Server IP
           <input
+            autoFocus
             type="text"
             placeholder="Enter server ip address"
             value={state.ip}

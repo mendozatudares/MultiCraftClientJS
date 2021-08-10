@@ -27,6 +27,7 @@ function UsernameForm(props) {
         <label>
           Minecraft Username
           <input
+            autoFocus
             type="text"
             placeholder="Enter username"
             value={state.username}
