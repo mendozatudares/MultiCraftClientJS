@@ -10,7 +10,6 @@ function UsernameForm(props) {
     setState({ ...state, username: event.target.value });
   };
   const handleSubmit = (event) => {
-    console.log(event.target);
     getUser(state.websocket, state.username, (data) => {
       setState({
         ...state,

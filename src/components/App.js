@@ -13,7 +13,7 @@ function App() {
     username: "",
     uuid: "",
     command: "",
-    websocket: "",
+    websocket: null,
   });
 
   return (
