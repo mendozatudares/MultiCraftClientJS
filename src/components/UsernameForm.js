@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { getUser } from "../utils/websocket";
 
 function UsernameForm(props) {
   const state = props.state;
   const setState = props.setState;
+  const [entryMethod, setEntryMethod] = useState(null);
 
   const handleChange = (event) => {
     setState({ ...state, username: event.target.value });
   };
   const handleSubmit = (event) => {
+    console.log(event.target);
     getUser(state.websocket, state.username, (data) => {
       setState({
         ...state,
         username: data.name,
         uuid: data.id,
-        view: "text",
+        view: entryMethod,
       });
     });
     event.preventDefault();
@@ -31,7 +33,16 @@ function UsernameForm(props) {
             onChange={handleChange}
           />
         </label>
-        <input type="submit" value="Submit" />
+        <input
+          onClick={() => setEntryMethod("text")}
+          type="submit"
+          value="Use Text"
+        />
+        <input
+          onClick={() => setEntryMethod("voice")}
+          type="submit"
+          value="Use Voice"
+        />
       </form>
     </div>
   );
