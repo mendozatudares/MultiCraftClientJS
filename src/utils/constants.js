@@ -1,5 +1,5 @@
 // Dictionaries of commands, directions and materials supported by the system
-export const COMMANDS = {
+const COMMANDS = {
   build: true,
   place: true,
   move: true,
@@ -13,7 +13,8 @@ export const COMMANDS = {
   give: true,
 };
 
-export const DIRECTIONS = {
+// From WordNet
+const DIRECTIONS = {
   up: "up",
   down: "down",
   left: "left",
@@ -165,9 +166,10 @@ export const DIRECTIONS = {
   backwards: "back",
   rearward: "back",
   rearwards: "back",
-}; // taken from wordnet
+};
 
-export const MATERIALS = [
+// From Bukkit API v1.14
+const MATERIALS = [
   "acacia boat",
   "acacia button",
   "acacia door",
@@ -1136,6 +1138,8 @@ export const MATERIALS = [
   "zombie spawn egg",
   "zombie villager spawn egg",
   "zombie wall head",
-]; // taken from v1.14 bukkit api
+];
 
-export const MATERIALS_REVERSED = MATERIALS.reverse();
+MATERIALS.reverse();
+
+export { COMMANDS, DIRECTIONS, MATERIALS };

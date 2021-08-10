@@ -1,6 +1,6 @@
 import nlp from "compromise";
 import compromiseNumbers from "compromise-numbers";
-import { COMMANDS, DIRECTIONS, MATERIALS_REVERSED } from "./constants";
+import { COMMANDS, DIRECTIONS, MATERIALS } from "./constants";
 
 nlp.extend(compromiseNumbers);
 
@@ -57,7 +57,7 @@ GameCommand.prototype.getGameCommandArgs = function () {
 };
 
 GameCommand.prototype.setMaterial = function () {
-  let material = MATERIALS_REVERSED.find((element) => this.doc.has(element));
+  let material = MATERIALS.find((element) => this.doc.has(element));
   this.args.material =
     material !== undefined ? material.replace(/\s+/g, "_") : "stone";
 };
