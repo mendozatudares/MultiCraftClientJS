@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { initRecognition } from "../utils/speech-to-text";
+import { processInstruction } from "../utils/parser";
+import { sendCommand } from "../utils/websocket";
 
 function VoiceEntry(props) {
   const state = props.state;
-  const setState = props.setState;
   const [recognition, setRecognition] = useState(null);
   const [transcript, setTranscript] = useState("");
 
@@ -22,26 +23,23 @@ function VoiceEntry(props) {
     }
   }, [recognition]);
 
-  const handleChange = (event) => {
-    setState({ ...state, command: event.target.value });
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+  useEffect(() => {
+    sendCommand(state.websocket, state.uuid, processInstruction(transcript));
+  }, [state, transcript]);
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Voice Command
-          <input
-            type="text"
-            placeholder="Speak command"
-            value={transcript}
-            onChange={handleChange}
-            disabled={true}
-          />
-        </label>
-      </form>
+      <label>Server: {`${state.ip}:${state.port}`}</label>
+      <label>Username: {state.username}</label>
+      <label>
+        Voice Command
+        <input
+          type="text"
+          placeholder="Speak command"
+          value={transcript}
+          disabled={true}
+        />
+      </label>
     </div>
   );
 }
