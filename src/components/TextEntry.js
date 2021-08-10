@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
 function TextEntry(props) {
   const state = props.state;
-  const setState = props.setState;
+  const [command, setCommand] = useState("");
 
   const handleChange = (event) => {
-    setState({ ...state, command: event.target.value });
+    setCommand(event.target.value);
   };
+
   const handleSubmit = (event) => {
-    sendCommand(state.websocket, state.uuid, processInstruction(state.command));
+    sendCommand(state.websocket, state.uuid, processInstruction(command));
     event.preventDefault();
   };
+
   return (
     <div>
       <label>Server: {`${state.ip}:${state.port}`}</label>
@@ -24,7 +26,7 @@ function TextEntry(props) {
             autoFocus
             type="text"
             placeholder="Enter command"
-            value={state.command}
+            value={command}
             onChange={handleChange}
           />
         </label>

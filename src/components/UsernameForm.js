@@ -9,6 +9,7 @@ function UsernameForm(props) {
   const handleChange = (event) => {
     setState({ ...state, username: event.target.value });
   };
+
   const handleSubmit = (event) => {
     getUser(state.websocket, state.username, (data) => {
       setState({
@@ -20,6 +21,7 @@ function UsernameForm(props) {
     });
     event.preventDefault();
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>

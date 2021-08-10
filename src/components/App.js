@@ -12,7 +12,6 @@ function App() {
     port: "5005",
     username: "",
     uuid: "",
-    command: "",
     websocket: null,
   });
 
