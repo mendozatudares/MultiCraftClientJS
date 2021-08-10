@@ -9,7 +9,7 @@ function App() {
   const [state, setState] = useState({
     view: "server",
     ip: "localhost",
-    port: 5005,
+    port: "5005",
     username: "",
     uuid: "",
     command: "",

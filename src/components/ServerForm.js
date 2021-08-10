@@ -6,8 +6,9 @@ function ServerForm(props) {
   const setState = props.setState;
 
   const handleChange = (event) => {
-    setState({ ...state, ip: event.target.value });
+    setState({ ...state, [event.target.name]: event.target.value });
   };
+
   const handleSubmit = (event) => {
     initSocket(state.ip, state.port, (socket) => {
       setState({
@@ -18,6 +19,7 @@ function ServerForm(props) {
     });
     event.preventDefault();
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -26,8 +28,19 @@ function ServerForm(props) {
           <input
             autoFocus
             type="text"
+            name="ip"
             placeholder="Enter server ip address"
             value={state.ip}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Server Port
+          <input
+            type="text"
+            name="port"
+            placeholder="Enter server port"
+            value={state.port}
             onChange={handleChange}
           />
         </label>
