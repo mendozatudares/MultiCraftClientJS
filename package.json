@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tensorflow-models/face-landmarks-detection": "^0.0.3",
+    "@tensorflow/tfjs": "^3.8.0",
     "compromise": "^13.11.3",
     "compromise-numbers": "^1.4.0",
     "react": "^17.0.2",
