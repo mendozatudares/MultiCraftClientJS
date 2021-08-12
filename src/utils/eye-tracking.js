@@ -1,146 +1,71 @@
+import "@tensorflow/tfjs-backend-webgl";
+import { load } from "@tensorflow-models/face-landmarks-detection";
+
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
-const GREEN = '#32EEDB';
-const RED = '#FF2C35';
-const BLUE = '#157AB3';
 const LEFT_KEYPOINTS = [362, 263];
 const RIGHT_KEYPOINTS = [33, 133];
-let stopPrediction = false;
 
-var eyeDiagnostic = document.getElementById('webcam-output');
-
-function distance(a, b) {
-  return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
+function getDistance(a, b) {
+  return Math.hypot(a[0] - b[0], a[1] - b[1]);
 }
 
-function determineDirection(leftCenter, rightCenter, keypoints) {
-  // Determine direction of both eyes.
-  const leftThresh = 1.5, rightThresh = 0.75;
-  const leftRatio = distance(leftCenter, keypoints[LEFT_KEYPOINTS[0]]) / distance(leftCenter, keypoints[LEFT_KEYPOINTS[1]]);
-  const rightRatio = distance(rightCenter, keypoints[RIGHT_KEYPOINTS[0]]) / distance(rightCenter, keypoints[RIGHT_KEYPOINTS[1]]);
-  return leftRatio > leftThresh && rightRatio > leftThresh ? 'Left'
-    : leftRatio < rightThresh && rightRatio < rightThresh ? 'Right'
-      : 'Center';
+// change later to use annotations?
+function getDirection(keypoints) {
+  const leftCenter = keypoints[NUM_KEYPOINTS];
+  const rightCenter = keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS];
+  const leftThresh = 1.5,
+    rightThresh = 0.75;
+  const leftRatio =
+    getDistance(leftCenter, keypoints[LEFT_KEYPOINTS[0]]) /
+    getDistance(leftCenter, keypoints[LEFT_KEYPOINTS[1]]);
+  const rightRatio =
+    getDistance(rightCenter, keypoints[RIGHT_KEYPOINTS[0]]) /
+    getDistance(rightCenter, keypoints[RIGHT_KEYPOINTS[1]]);
+  return leftRatio > leftThresh && rightRatio > leftThresh
+    ? "Left"
+    : leftRatio < rightThresh && rightRatio < rightThresh
+    ? "Right"
+    : "Center";
 }
 
-let model, ctx, videoWidth, videoHeight, video, canvas,
-  scatterGLHasInitialized = false, scatterGL, rafID;
-const VIDEO_SIZE = 500;
-const state = {
-  maxFaces: 1,
-  predictIrises: true
-};
-
-async function setupCamera() {
-  video = document.getElementById('video');
-
+async function startStream() {
   const stream = await navigator.mediaDevices.getUserMedia({
-    'audio': false,
-    'video': {
-      facingMode: 'user',
-      // Only setting the video to a specified size in order to accommodate a
-      // point cloud, so on mobile devices accept the default size.
-      width: VIDEO_SIZE,
-      height: VIDEO_SIZE
-    },
+    audio: false,
+    video: { facingMode: "user" },
   });
-  video.srcObject = stream;
 
-  return new Promise((resolve) => {
-    video.onloadedmetadata = () => {
-      resolve(video);
-    };
-  });
+  return stream;
 }
 
-async function renderPrediction() {
-  if (stopPrediction) {
-    return;
-  }
+async function stopStream(stream) {
+  await stream.getTracks().forEach((track) => track.stop());
+}
 
+async function startVideo(videoElement) {
+  videoElement.srcObject = await startStream();
+  await videoElement.play();
+  console.log("[eye-tracking] Started webcam");
+}
+
+async function stopVideo(videoElement) {
+  await stopStream(videoElement.srcObject);
+  videoElement.srcObject = null;
+  console.log("[eye-tracking] Stopped webcam");
+}
+
+async function trackEyes(video) {
+  const model = await load("mediapipe-facemesh", { maxFaces: 1 });
   const predictions = await model.estimateFaces({
     input: video,
-    returnTensors: false,
     flipHorizontal: false,
-    predictIrises: state.predictIrises
   });
-  ctx.drawImage(
-    video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
-
   if (predictions.length > 0) {
-    predictions.forEach(prediction => {
-      const keypoints = prediction.scaledMesh;
-
-      // ctx.fillStyle = BLUE;
-
-      // LEFT_KEYPOINTS.forEach(i => {
-      //   const x = keypoints[i][0];
-      //   const y = keypoints[i][1];
-
-      //   ctx.beginPath();
-      //   ctx.arc(x, y, 1 /* radius */, 0, 2 * Math.PI);
-      //   ctx.fill();
-      // });
-
-      // RIGHT_KEYPOINTS.forEach(i => {
-      //   const x = keypoints[i][0];
-      //   const y = keypoints[i][1];
-
-      //   ctx.beginPath();
-      //   ctx.arc(x, y, 1 /* radius */, 0, 2 * Math.PI);
-      //   ctx.fill();
-      // });
-
-      if (keypoints.length > NUM_KEYPOINTS) {
-        ctx.fillStyle = RED;
-
-        const leftCenter = keypoints[NUM_KEYPOINTS];
-
-        // ctx.beginPath();
-        // ctx.arc(leftCenter[0], leftCenter[1], 1 /* radius */, 0, 2 * Math.PI);
-        // ctx.fill();
-
-        if (keypoints.length > NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS) {
-          const rightCenter = keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS];
-
-          // ctx.beginPath();
-          // ctx.arc(rightCenter[0], rightCenter[1], 1 /* radius */, 0, 2 * Math.PI);
-          // ctx.fill();
-
-          let direction = determineDirection(leftCenter, rightCenter, keypoints);
-          eyeDiagnostic.textContent = 'Eye Direction: ' + direction;
-        }
-      }
-    });
+    const keypoints = predictions[0].scaledMesh;
+    const direction = getDirection(keypoints);
+    return direction;
   }
+  return null;
+}
 
-  rafID = requestAnimationFrame(renderPrediction);
-};
-
-async function main() {
-  // await tf.setBackend(state.backend);
-
-  await setupCamera();
-  video.play();
-  videoWidth = video.videoWidth;
-  videoHeight = video.videoHeight;
-  video.width = videoWidth;
-  video.height = videoHeight;
-
-  // canvas = document.getElementById('output');
-  // canvas.width = videoWidth;
-  // canvas.height = videoHeight;
-  // const canvasContainer = document.querySelector('.canvas-wrapper');
-  // canvasContainer.setAttribute('style', `width: ${videoWidth}px; height: ${videoHeight}px`);
-
-  // ctx = canvas.getContext('2d');
-  // ctx.translate(canvas.width, 0);
-  // ctx.scale(-1, 1);
-
-  model = await faceLandmarksDetection.load(
-    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-    { maxFaces: state.maxFaces });
-  renderPrediction();
-};
-
-main();
+export { startVideo, stopVideo, trackEyes };
