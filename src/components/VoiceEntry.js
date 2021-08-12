@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FormLabel, HStack, Textarea } from "@chakra-ui/react";
 import ConnectionInfo from "./ConnectionInfo";
 import { initRecognition } from "../utils/speech-to-text";
 import { processInstruction } from "../utils/parser";
@@ -29,19 +30,18 @@ function VoiceEntry(props) {
   }, [state, transcript]);
 
   return (
-    <div>
+    <>
       <ConnectionInfo state={state} />
-      <label>
-        Voice Command
-        <textarea
+      <HStack>
+        <FormLabel>Voice Command</FormLabel>
+        <Textarea
           type="text"
-          rows={5}
-          placeholder="Speak command"
+          placeholder="Speak Command"
           value={transcript}
           disabled={true}
-        />
-      </label>
-    </div>
+        ></Textarea>
+      </HStack>
+    </>
   );
 }
 
