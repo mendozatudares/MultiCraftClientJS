@@ -7,6 +7,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import ConnectionInfo from "./ConnectionInfo";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
@@ -26,9 +27,8 @@ function TextEntry(props) {
 
   return (
     <>
+      <ConnectionInfo state={state} />
       <form onSubmit={handleSubmit}>
-        <FormLabel>Server: {`${state.ip}:${state.port}`}</FormLabel>
-        <FormLabel>Username: {state.username}</FormLabel>
         <FormControl id="text-command" isRequired>
           <FormLabel>Text Command</FormLabel>
           <InputGroup>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ConnectionInfo from "./ConnectionInfo";
 import { initRecognition } from "../utils/speech-to-text";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
@@ -29,8 +30,7 @@ function VoiceEntry(props) {
 
   return (
     <div>
-      <label>Server: {`${state.ip}:${state.port}`}</label>
-      <label>Username: {state.username}</label>
+      <ConnectionInfo state={state} />
       <label>
         Voice Command
         <textarea
