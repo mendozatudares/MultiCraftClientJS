@@ -1,4 +1,12 @@
 import React, { useState } from "react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
@@ -12,27 +20,34 @@ function TextEntry(props) {
 
   const handleSubmit = (event) => {
     sendCommand(state.websocket, state.uuid, processInstruction(command));
+    setCommand("");
     event.preventDefault();
   };
 
   return (
-    <div>
-      <label>Server: {`${state.ip}:${state.port}`}</label>
-      <label>Username: {state.username}</label>
+    <>
       <form onSubmit={handleSubmit}>
-        <label>
-          Text Command
-          <input
-            autoFocus
-            type="text"
-            placeholder="Enter command"
-            value={command}
-            onChange={handleChange}
-          />
-        </label>
-        <input type="submit" value="Send" />
+        <FormLabel>Server: {`${state.ip}:${state.port}`}</FormLabel>
+        <FormLabel>Username: {state.username}</FormLabel>
+        <FormControl id="text-command" isRequired>
+          <FormLabel>Text Command</FormLabel>
+          <InputGroup>
+            <Input
+              autoFocus
+              type="text"
+              placeholder="Enter Command"
+              value={command}
+              onChange={handleChange}
+            ></Input>
+            <InputRightElement>
+              <Button colorScheme="teal" type="submit">
+                Send
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
       </form>
-    </div>
+    </>
   );
 }
 
