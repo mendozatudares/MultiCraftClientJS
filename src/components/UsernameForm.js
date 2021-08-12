@@ -1,10 +1,19 @@
 import React, { useState } from "react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  Radio,
+  RadioGroup,
+} from "@chakra-ui/react";
 import { getUser } from "../utils/websocket";
 
 function UsernameForm(props) {
   const state = props.state;
   const setState = props.setState;
-  const [entryMethod, setEntryMethod] = useState(null);
+  const [entryMethod, setEntryMethod] = useState("text");
 
   const handleChange = (event) => {
     setState({ ...state, username: event.target.value });
@@ -23,30 +32,38 @@ function UsernameForm(props) {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
-        <label>
-          Minecraft Username
-          <input
+        <FormControl id="minecraft-username" isRequired>
+          <FormLabel>Minecraft Username</FormLabel>
+          <Input
             autoFocus
             type="text"
             placeholder="Enter username"
             value={state.username}
             onChange={handleChange}
-          />
-        </label>
-        <input
-          onClick={() => setEntryMethod("text")}
-          type="submit"
-          value="Use Text"
-        />
-        <input
-          onClick={() => setEntryMethod("voice")}
-          type="submit"
-          value="Use Voice"
-        />
+          ></Input>
+        </FormControl>
+        <HStack>
+          <FormControl id="input-method" as="fieldset">
+            <FormLabel as="legend">Choose an Input Method</FormLabel>
+            <RadioGroup defaultValue="Text">
+              <HStack spacing="24px">
+                <Radio onClick={() => setEntryMethod("text")} value="Text">
+                  Text
+                </Radio>
+                <Radio onClick={() => setEntryMethod("voice")} value="Voice">
+                  Voice
+                </Radio>
+              </HStack>
+            </RadioGroup>
+          </FormControl>
+          <Button mt={4} colorScheme="teal" type="submit">
+            Submit
+          </Button>
+        </HStack>
       </form>
-    </div>
+    </>
   );
 }
 

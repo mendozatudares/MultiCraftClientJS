@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import "./App.css";
 import ServerForm from "./ServerForm";
 import UsernameForm from "./UsernameForm";
@@ -16,22 +17,24 @@ function App() {
   });
 
   return (
-    <div className="App">
-      <header className="App-header">
-        {state.view === "server" && (
-          <ServerForm state={state} setState={setState} />
-        )}
-        {state.view === "username" && (
-          <UsernameForm state={state} setState={setState} />
-        )}
-        {state.view === "text" && (
-          <TextEntry state={state} setState={setState} />
-        )}
-        {state.view === "voice" && (
-          <VoiceEntry state={state} setState={setState} />
-        )}
-      </header>
-    </div>
+    <ChakraProvider>
+      <div className="App">
+        <header className="App-header">
+          {state.view === "server" && (
+            <ServerForm state={state} setState={setState} />
+          )}
+          {state.view === "username" && (
+            <UsernameForm state={state} setState={setState} />
+          )}
+          {state.view === "text" && (
+            <TextEntry state={state} setState={setState} />
+          )}
+          {state.view === "voice" && (
+            <VoiceEntry state={state} setState={setState} />
+          )}
+        </header>
+      </div>
+    </ChakraProvider>
   );
 }
 
