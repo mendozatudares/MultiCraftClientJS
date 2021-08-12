@@ -1,13 +1,17 @@
 import React from "react";
-import { FormLabel } from "@chakra-ui/react";
+import { Box, FormLabel } from "@chakra-ui/react";
 
 function ConnectionInfo(props) {
   const state = props.state;
   return (
     <>
-      <FormLabel>Server: {`${state.ip}:${state.port}`}</FormLabel>
-      <FormLabel>Username: {state.username}</FormLabel>
-      <FormLabel>UUID: {state.uuid}</FormLabel>
+      <Box padding={3} borderWidth="1px" borderRadius="md">
+        <FormLabel fontSize="md">
+          Server: {`${state.ip}:${state.port}`}
+        </FormLabel>
+        <FormLabel fontSize="md">Username: {state.username}</FormLabel>
+        <FormLabel fontSize="sm">UUID: {state.uuid}</FormLabel>
+      </Box>
     </>
   );
 }
