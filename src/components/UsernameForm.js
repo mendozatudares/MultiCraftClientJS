@@ -19,6 +19,10 @@ function UsernameForm(props) {
     setState({ ...state, username: event.target.value });
   };
 
+  const handleRadioChange = (event) => {
+    setEntryMethod(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     getUser(state.websocket, state.username, (data) => {
       setState({
@@ -45,14 +49,14 @@ function UsernameForm(props) {
           ></Input>
         </FormControl>
         <HStack>
-          <FormControl id="input-method" as="fieldset">
+          <FormControl id="input-method" as="fieldset" isRequired>
             <FormLabel as="legend">Choose an Input Method</FormLabel>
-            <RadioGroup defaultValue="Text">
+            <RadioGroup defaultValue="text">
               <HStack spacing="24px">
-                <Radio onClick={() => setEntryMethod("text")} value="Text">
+                <Radio value="text" onChange={handleRadioChange}>
                   Text
                 </Radio>
-                <Radio onClick={() => setEntryMethod("voice")} value="Voice">
+                <Radio value="voice" onChange={handleRadioChange}>
                   Voice
                 </Radio>
               </HStack>
