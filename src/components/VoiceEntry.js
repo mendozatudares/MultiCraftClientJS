@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormLabel, HStack, Textarea } from "@chakra-ui/react";
 import ConnectionInfo from "./ConnectionInfo";
+import EyeTracking from "./EyeTracking";
 import { initRecognition } from "../utils/speech-to-text";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
@@ -41,6 +42,7 @@ function VoiceEntry(props) {
           disabled={true}
         ></Textarea>
       </HStack>
+      <EyeTracking />
     </>
   );
 }

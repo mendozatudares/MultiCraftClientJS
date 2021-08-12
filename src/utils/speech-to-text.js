@@ -22,16 +22,16 @@ function initRecognition(callback) {
 
   recognition.onspeechend = function () {
     recognition.stop();
-    console.log("[Recognition] Stopped speech recognition");
+    console.log("[recognition] Stopped speech recognition");
   };
 
   recognition.onerror = function (event) {
-    console.error(`[Recognition] ERROR: ${event.error}`);
+    console.error(`[recognition] ERROR: ${event.error}`);
   };
 
   recognition.start();
   callback(recognition);
-  console.log("[Recognition] Started speech recognition");
+  console.log("[recognition] Started speech recognition");
 }
 
 export { initRecognition };
