@@ -4,9 +4,8 @@ import { startVideo, stopVideo, trackEyes } from "../utils/eye-tracking";
 function EyeTracker() {
   useEffect(() => {
     const video = document.getElementById("eye-tracker-feed");
-    startVideo(video)
-      .then(() => trackEyes(video).then((r) => console.log(r)))
-      .then(() => stopVideo(video));
+    startVideo(video).then(() => trackEyes(video).then((r) => console.log(r)));
+    return () => stopVideo(video);
   }, []);
   return (
     <div>

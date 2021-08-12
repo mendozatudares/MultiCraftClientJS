@@ -1,22 +1,32 @@
 import React, { useState } from "react";
 import {
   Button,
+  Center,
   FormControl,
   FormLabel,
   Input,
   InputGroup,
   InputRightElement,
+  Switch,
 } from "@chakra-ui/react";
 import ConnectionInfo from "./ConnectionInfo";
+import EyeTracker from "./EyeTracker";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
 function TextEntry(props) {
   const state = props.state;
   const [command, setCommand] = useState("");
+  const [eyeTracking, setEyeTracking] = useState(false);
 
   const handleChange = (event) => {
     setCommand(event.target.value);
+  };
+
+  const handleSwitchChange = () => {
+    setEyeTracking(!eyeTracking);
+    if (eyeTracking) {
+    }
   };
 
   const handleSubmit = (event) => {
@@ -29,7 +39,7 @@ function TextEntry(props) {
     <>
       <ConnectionInfo state={state} />
       <form onSubmit={handleSubmit}>
-        <FormControl id="text-command" isRequired>
+        <FormControl mt="5" id="text-command" isRequired>
           <FormLabel>Text Command</FormLabel>
           <InputGroup>
             <Input
@@ -47,6 +57,19 @@ function TextEntry(props) {
           </InputGroup>
         </FormControl>
       </form>
+      <Center>
+        <FormControl mt="5" display="flex" alignItems="center">
+          <FormLabel htmlFor="eye-tracking" mb="0">
+            Eye Tracking
+          </FormLabel>
+          <Switch
+            isChecked={eyeTracking}
+            onChange={handleSwitchChange}
+            id="eye-tracking"
+          />
+        </FormControl>
+      </Center>
+      {eyeTracking && <EyeTracker />}
     </>
   );
 }
