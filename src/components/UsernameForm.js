@@ -39,7 +39,7 @@ function UsernameForm(props) {
           <Input
             autoFocus
             type="text"
-            placeholder="Enter username"
+            placeholder="Enter Username"
             value={state.username}
             onChange={handleChange}
           ></Input>

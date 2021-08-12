@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { initSocket } from "../utils/websocket";
 
 function ServerForm(props) {
@@ -21,32 +22,34 @@ function ServerForm(props) {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
-        <label>
-          Server IP
-          <input
+        <FormControl id="server-ip" isRequired>
+          <FormLabel>Server IP</FormLabel>
+          <Input
             autoFocus
             type="text"
             name="ip"
-            placeholder="Enter server ip address"
+            placeholder="Enter Server IP"
             value={state.ip}
             onChange={handleChange}
-          />
-        </label>
-        <label>
-          Server Port
-          <input
+          ></Input>
+        </FormControl>
+        <FormControl id="server-port" isRequired>
+          <FormLabel>Server Port</FormLabel>
+          <Input
             type="text"
             name="port"
-            placeholder="Enter server port"
+            placeholder="Enter Server Port"
             value={state.port}
             onChange={handleChange}
-          />
-        </label>
-        <input type="submit" value="Submit" />
+          ></Input>
+        </FormControl>
+        <Button mt={4} colorScheme="teal" type="submit">
+          Submit
+        </Button>
       </form>
-    </div>
+    </>
   );
 }
 
