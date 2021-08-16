@@ -5,6 +5,8 @@ const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
 const LEFT_KEYPOINTS = [362, 263];
 const RIGHT_KEYPOINTS = [33, 133];
+const LEFT_THRESH = 1.05;
+const RIGHT_THRESH = 0.95;
 
 function getDistance(a, b) {
   return Math.hypot(a[0] - b[0], a[1] - b[1]);
@@ -14,8 +16,8 @@ function getDistance(a, b) {
 function getDirection(keypoints) {
   const leftCenter = keypoints[NUM_KEYPOINTS];
   const rightCenter = keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS];
-  const leftThresh = 1.5,
-    rightThresh = 0.75;
+  const leftThresh = LEFT_THRESH;
+  const rightThresh = RIGHT_THRESH;
   const leftRatio =
     getDistance(leftCenter, keypoints[LEFT_KEYPOINTS[0]]) /
     getDistance(leftCenter, keypoints[LEFT_KEYPOINTS[1]]);
