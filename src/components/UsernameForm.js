@@ -36,7 +36,7 @@ function UsernameForm(props) {
   };
 
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit}>
         <FormControl id="minecraft-username" isRequired>
           <FormLabel>Minecraft Username</FormLabel>
@@ -67,7 +67,7 @@ function UsernameForm(props) {
           </Button>
         </HStack>
       </form>
-    </>
+    </div>
   );
 }
 

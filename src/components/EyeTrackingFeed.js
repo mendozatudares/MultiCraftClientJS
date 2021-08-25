@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { startVideo, stopVideo, trackEyes } from "../utils/eye-tracking";
+import { startVideo, trackEyes, stopVideo } from "../utils/eye-tracking";
 
 function EyeTrackingFeed() {
   useEffect(() => {
     const video = document.getElementById("eye-tracker-feed");
-    startVideo(video).then(() => trackEyes(video).then((r) => console.log(r)));
-    return () => stopVideo(video);
+    startVideo(video).then((model) => setInterval(() => trackEyes(model, video).then((r) => console.log(r)), 500));
+    // return () => stopVideo(video);
   }, []);
   return (
-    <>
+    <div>
       <video id="eye-tracker-feed"></video>
-    </>
+    </div>
   );
 }
 

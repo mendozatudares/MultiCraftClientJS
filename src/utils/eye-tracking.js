@@ -47,7 +47,9 @@ async function stopStream(stream) {
 async function startVideo(videoElement) {
   videoElement.srcObject = await startStream();
   await videoElement.play();
+  const model = await load("mediapipe-facemesh", { maxFaces: 1 });
   console.log("[eye-tracking] Started webcam");
+  return model;
 }
 
 async function stopVideo(videoElement) {
@@ -56,8 +58,7 @@ async function stopVideo(videoElement) {
   console.log("[eye-tracking] Stopped webcam");
 }
 
-async function trackEyes(video) {
-  const model = await load("mediapipe-facemesh", { maxFaces: 1 });
+async function trackEyes(model, video) {
   const predictions = await model.estimateFaces({
     input: video,
     flipHorizontal: false,

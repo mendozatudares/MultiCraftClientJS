@@ -31,7 +31,7 @@ function VoiceEntry(props) {
   }, [state, transcript]);
 
   return (
-    <>
+    <div>
       <ConnectionInfo state={state} />
       <HStack>
         <FormLabel>Voice Command</FormLabel>
@@ -43,7 +43,7 @@ function VoiceEntry(props) {
         ></Textarea>
       </HStack>
       <EyeTracking />
-    </>
+    </div>
   );
 }
 
