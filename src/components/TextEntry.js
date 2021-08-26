@@ -8,7 +8,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import ConnectionInfo from "./ConnectionInfo";
-import EyeTracking from "./EyeTracking";
+import EyeTrackingFeed from "./EyeTrackingFeed";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
@@ -48,7 +48,7 @@ function TextEntry(props) {
           </InputGroup>
         </FormControl>
       </form>
-      <EyeTracking />
+      <EyeTrackingFeed />
     </div>
   );
 }
