@@ -26,7 +26,6 @@ function TextEntry(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const args = processInstruction(command);
-    console.log(args);
     if (args.command) {
       if (args.track) {
         setTrack(true);

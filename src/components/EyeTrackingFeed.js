@@ -3,7 +3,7 @@ import { startVideo, trackEyes, loadModel } from "../utils/eye-tracking";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
-const PERIOD = 100;
+const PERIOD = 250;
 const DWELL = 3000;
 
 function EyeTrackingFeed(props) {
@@ -44,7 +44,6 @@ function EyeTrackingFeed(props) {
   useEffect(() => {
     const handleEyeDirection = (d) => {
       if (d && track) {
-        console.log(d);
         if (d === direction && direction === "Center") {
           if (counter + PERIOD > DWELL) {
             if (move) {
