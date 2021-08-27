@@ -15,15 +15,30 @@ import { sendCommand } from "../utils/websocket";
 function TextEntry(props) {
   const state = props.state;
   const [command, setCommand] = useState("");
+  const [track, setTrack] = useState(false);
+  const [move, setMove] = useState(false);
+  const [trackCommand, setTrackCommand] = useState({});
 
   const handleChange = (event) => {
     setCommand(event.target.value);
   };
 
   const handleSubmit = (event) => {
-    sendCommand(state.websocket, state.uuid, processInstruction(command));
-    setCommand("");
     event.preventDefault();
+    const args = processInstruction(command);
+    console.log(args);
+    if (args.command) {
+      if (args.track) {
+        setTrack(true);
+        setTrackCommand(args);
+        if (args.command === "move") {
+          setMove(true);
+        }
+      } else {
+        sendCommand(state.websocket, state.uuid, args);
+      }
+    }
+    setCommand("");
   };
 
   return (
@@ -48,7 +63,22 @@ function TextEntry(props) {
           </InputGroup>
         </FormControl>
       </form>
-      <EyeTrackingFeed />
+      <EyeTrackingFeed
+        state={state} 
+        track={track} 
+        move={move}
+        onDwell={() => {
+          if (trackCommand.command === "build" || trackCommand.command === "place") {
+            sendCommand(state.websocket, state.uuid, trackCommand);
+            setTrack(false);
+            setTrackCommand({});
+          }
+        }}
+        onEsc={() => {
+          setTrack(false);
+          setMove(false);
+        }}
+      />
     </div>
   );
 }

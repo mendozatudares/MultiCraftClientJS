@@ -40,22 +40,14 @@ async function startStream() {
   return stream;
 }
 
-async function stopStream(stream) {
-  await stream.getTracks().forEach((track) => track.stop());
-}
-
 async function startVideo(videoElement) {
   videoElement.srcObject = await startStream();
   await videoElement.play();
-  const model = await load("mediapipe-facemesh", { maxFaces: 1 });
   console.log("[eye-tracking] Started webcam");
-  return model;
 }
 
-async function stopVideo(videoElement) {
-  await stopStream(videoElement.srcObject);
-  videoElement.srcObject = null;
-  console.log("[eye-tracking] Stopped webcam");
+async function loadModel() {
+  return await load("mediapipe-facemesh", { maxFaces: 1 });
 }
 
 async function trackEyes(model, video) {
@@ -71,4 +63,4 @@ async function trackEyes(model, video) {
   return null;
 }
 
-export { startVideo, stopVideo, trackEyes };
+export { loadModel, startVideo, trackEyes };

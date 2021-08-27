@@ -147,7 +147,8 @@ GameCommand.prototype.getTrackArgs = function () {
   } else if (this.doc.has("place")) {
     this.getPlaceArgs();
   } else if (this.doc.has("move")) {
-    this.args.move = true;
+    this.args.command = "move";
+    this.args.track = true;
     this.isValid = true;
   }
 };
@@ -157,6 +158,7 @@ GameCommand.prototype.getLookArgs = function () {
   let dimensions = this.getDimensions();
   this.args.dimensions =
     dimensions.length !== 0 ? dimensions[0] : defaultDegrees;
+  this.setDirection();
 
   this.isValid = true;
 };
@@ -183,7 +185,6 @@ GameCommand.prototype.getGiveArgs = function () {
 function processInstruction(instruction) {
   let doc = nlp(instruction.toLowerCase());
   var gameCommand = new GameCommand(doc);
-  // console.log(gameCommand);
   return gameCommand.isValid ? gameCommand.args : {};
 }
 
