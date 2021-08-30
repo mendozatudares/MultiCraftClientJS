@@ -22,7 +22,7 @@ function ServerForm(props) {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
         <FormControl id="server-ip" isRequired>
           <FormLabel>Server IP</FormLabel>
@@ -49,7 +49,7 @@ function ServerForm(props) {
           Submit
         </Button>
       </form>
-    </div>
+    </>
   );
 }
 

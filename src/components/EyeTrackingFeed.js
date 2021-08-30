@@ -93,9 +93,9 @@ function EyeTrackingFeed(props) {
   }, [onEsc]);
 
   return (
-    <div>
+    <>
       <video id="eye-tracker-feed"></video>
-    </div>
+    </>
   );
 }
 

@@ -12,7 +12,7 @@ function EyeTracking() {
   };
 
   return (
-    <div>
+    <>
       <Center>
         <FormControl mt="5" display="flex" alignItems="center">
           <FormLabel htmlFor="eye-tracking" mb="0">
@@ -26,7 +26,7 @@ function EyeTracking() {
         </FormControl>
       </Center>
       {enabled && <EyeTrackingFeed />}
-    </div>
+    </>
   );
 }
 

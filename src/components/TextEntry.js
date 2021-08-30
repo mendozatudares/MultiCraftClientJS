@@ -41,7 +41,7 @@ function TextEntry(props) {
   };
 
   return (
-    <div>
+    <>
       <ConnectionInfo state={state} />
       <form onSubmit={handleSubmit}>
         <FormControl mt="5" id="text-command" isRequired>
@@ -78,7 +78,7 @@ function TextEntry(props) {
           setMove(false);
         }}
       />
-    </div>
+    </>
   );
 }
 
