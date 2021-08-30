@@ -1,20 +1,20 @@
-// import { MATERIALS } from "./constants";
+import { MATERIALS } from "./constants";
 
 function initRecognition(callback) {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
-  // const SpeechGrammarList =
-  //   window.SpeechGrammarList || window.webkitSpeechGrammarList;
+  const SpeechGrammarList =
+    window.SpeechGrammarList || window.webkitSpeechGrammarList;
 
-  // const grammar =
-  //   "#JSGF V1.0; grammar materials; public <material> = " +
-  //   MATERIALS.map((element) => "'" + element + "'").join(" | ") +
-  //   " ;";
+  const grammar =
+    "#JSGF V1.0; grammar materials; public <material> = " +
+    MATERIALS.map((element) => "'" + element + "'").join(" | ") +
+    " ;";
 
   const recognition = new SpeechRecognition();
-  // const speechRecognitionList = new SpeechGrammarList();
-  // speechRecognitionList.addFromString(grammar, 1);
-  // recognition.grammars = speechRecognitionList;
+  const speechRecognitionList = new SpeechGrammarList();
+  speechRecognitionList.addFromString(grammar, 1);
+  recognition.grammars = speechRecognitionList;
   recognition.continuous = true;
   recognition.lang = "en-US";
   recognition.interimResults = false;
