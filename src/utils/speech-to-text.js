@@ -1,4 +1,4 @@
-import { MATERIALS } from "./constants";
+import { SPEECH_MATERIALS } from "./constants";
 
 function initRecognition(callback) {
   const SpeechRecognition =
@@ -8,7 +8,7 @@ function initRecognition(callback) {
 
   const grammar =
     "#JSGF V1.0; grammar materials; public <material> = " +
-    MATERIALS.map((element) => "'" + element + "'").join(" | ") +
+    SPEECH_MATERIALS.map((element) => "'" + element + "'").join(" | ") +
     " ;";
 
   const recognition = new SpeechRecognition();
