@@ -26,8 +26,13 @@ function initRecognition(callback) {
   };
 
   recognition.onerror = function (event) {
-    console.error(`[recognition] ERROR: ${event.error}`);
+    console.error(`[recognition] Received error ${event.error}, ending speech recognition`);
   };
+
+  recognition.onend = function() {
+    recognition.start();
+    console.log("[recognition] Started speech recognition again");
+  }
 
   recognition.start();
   callback(recognition);
