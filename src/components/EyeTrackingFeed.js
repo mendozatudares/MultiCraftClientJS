@@ -3,7 +3,7 @@ import { startVideo, trackEyes, loadModel } from "../utils/eye-tracking";
 import { processInstruction } from "../utils/parser";
 import { sendCommand } from "../utils/websocket";
 
-const PERIOD = 250;
+const PERIOD = 100;
 const DWELL = 3000;
 
 function EyeTrackingFeed(props) {
