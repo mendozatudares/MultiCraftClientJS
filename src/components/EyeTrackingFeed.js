@@ -1,102 +1,105 @@
-import React, { useEffect, useState } from "react";
-import { startVideo, trackEyes, loadModel } from "../utils/eye-tracking";
-import { processInstruction } from "../utils/parser";
-import { sendCommand } from "../utils/websocket";
+import React, {useEffect, useState} from "react";
+import {processInstruction} from "../utils/parser";
+import {webgazer} from "../utils/webgazer";
+import {sendCommand} from "../utils/websocket";
 
-const PERIOD = 100;
 const DWELL = 3000;
+const SENSITIVITY = 25;
+const TURNSPEED = 5;
 
 function EyeTrackingFeed(props) {
-  const state = props.state;
-  const track = props.track;
-  const move = props.move;
-  const onDwell = props.onDwell;
-  const onEsc = props.onEsc;
-  const [video, setVideo] = useState();
-  const [model, setModel] = useState();
-  const [direction, setDirection] = useState("Center");
-  const [counter, setCounter] = useState(0);
-  const [dwell, setDwell] = useState(false);
+    const state = props.state;
+    const track = props.track;
+    const move = props.move;
+    const onDwell = props.onDwell;
+    const onEsc = props.onEsc;
+    const [dwell, setDwell] = useState(false);
+    const [init, setInit] = useState(false);
+    var start = 0;
+    var position = {x: -1, y: -1};
+    var displacement = "Center";
 
-  useEffect(() => {
-    const initializeWebcam = async () => {
-      const video  = document.getElementById("eye-tracker-feed");
-      await startVideo(video);
-      setVideo(video);
-    }
+    useEffect(async () => {
+        const getDisplacement = (data) => {
+            var displaceX = data.x - position.x;
+            var displaceY = data.y - position.y;
+            position = {x: data.x, y: data.y};
 
-    if (!video) {
-      initializeWebcam();
-    }
-  }, [video]);
+            if (displaceX > SENSITIVITY)
+                return "Right";
+            else if (displaceX < -SENSITIVITY)
+                return "Left";
+            else if (displaceY > SENSITIVITY)
+                return "Down";
+            else if (displaceX < -SENSITIVITY)
+                return "Up";
+            else
+                return "Center";
+        };
 
-  useEffect(() => {
-    const getModel = async () => {
-      const model = await loadModel();
-      setModel(model);
-    };
+        const handleGaze = (data, clock) => {
+            const dir = getDisplacement(data);
+            console.log(clock, dir);
 
-    if (video && !model) {
-      getModel();
-    }
-  }, [model, video]);
-
-  useEffect(() => {
-    const handleEyeDirection = (d) => {
-      if (d && track) {
-        if (d === direction && direction === "Center") {
-          if (counter + PERIOD > DWELL) {
-            if (move) {
-              sendCommand(state.websocket, state.uuid, processInstruction("move 1 forward"));
-            } else {
-              setDwell(true);
+            if (dir && track) {
+                if (dir === displacement && displacement === "Center" && clock - start > DWELL) {
+                    if (move) {
+                        sendCommand(state.websocket, state.uuid, processInstruction("move 1 forward"));
+                    } else {
+                        setDwell(true);
+                    }
+                }
+            } else if (dir !== "Center") {
+                setDwell(false);
+                start = clock;
+                if (track) {
+                    sendCommand(state.websocket,
+                        state.uuid,
+                        processInstruction(`${(dir === "Up" || dir === "Down") ? "tilt" : "turn"} ${dir} ${TURNSPEED}`));
+                }
             }
-          }
-          setCounter(counter + PERIOD);
-        } else {
-          if (d !== "Center") {
+            displacement = dir;
+        };
+
+        if (!init) {
+            await webgazer.setRegression('ridge')
+                .setGazeListener(handleGaze)
+                .saveDataAcrossSessions(true)
+                .begin();
+            webgazer.showVideoPreview(true)
+                .showPredictionPoints(true)
+                .applyKalmanFilter(true);
+
+            setInit(true);
+        }
+    }, [init, start, displacement, move, state, track]);
+
+    useEffect(() => {
+        if (dwell) {
+            onDwell();
             setDwell(false);
             setCounter(0);
-            sendCommand(state.websocket, state.uuid, processInstruction(`turn ${d} 10`));
-          }
         }
-        setDirection(d);
-      }
-    };
+    }, [dwell, onDwell]);
 
-    if (video && model) {
-      var interval = setInterval(() => trackEyes(model, video).then((r) => handleEyeDirection(r)), PERIOD);
-    }
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.keyCode === 27) {
+                setDwell(false);
+                setCounter(0);
+                onEsc();
+            }
+        };
+        window.addEventListener("keydown", handleEsc);
 
-    return () => { if (interval) clearInterval(interval) };
-  }, [counter, direction, model, move, state, track, video]);
+        return () => window.removeEventListener("keydown", handleEsc);
+    }, [onEsc]);
 
-  useEffect(() => {
-    if (dwell) {
-      onDwell();
-      setDwell(false);
-      setCounter(0);
-    }
-  }, [dwell, onDwell]);
-
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.keyCode === 27) {
-        setDwell(false);
-        setCounter(0);
-        onEsc();
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
-
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onEsc]);
-
-  return (
-    <>
-      <video id="eye-tracker-feed"></video>
-    </>
-  );
+    return (
+        <>
+            <video id="eye-tracker-feed"></video>
+        </>
+    );
 }
 
 export default EyeTrackingFeed;
