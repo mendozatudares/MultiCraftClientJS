@@ -4,8 +4,7 @@ import {webgazer} from "../utils/webgazer";
 import {sendCommand} from "../utils/websocket";
 
 const DWELL = 3000;
-const SENSITIVITY = 25;
-const TURNSPEED = 5;
+const SENSITIVITY = 12;
 
 function EyeTrackingFeed(props) {
     const state = props.state;
@@ -16,49 +15,33 @@ function EyeTrackingFeed(props) {
     const [dwell, setDwell] = useState(false);
     const [init, setInit] = useState(false);
     var start = 0;
-    var position = {x: -1, y: -1};
     var displacement = "Center";
 
     useEffect(async () => {
         const getDisplacement = (data) => {
-            var displaceX = data.x - position.x;
-            var displaceY = data.y - position.y;
-            position = {x: data.x, y: data.y};
-
-            if (displaceX > SENSITIVITY)
-                return "Right";
-            else if (displaceX < -SENSITIVITY)
-                return "Left";
-            else if (displaceY > SENSITIVITY)
-                return "Down";
-            else if (displaceX < -SENSITIVITY)
-                return "Up";
-            else
-                return "Center";
+            const width = window.innerWidth/2;
+            const height = window.innerHeight/2;
+            var displaceX = !data ? 0 : data.x - width;
+            var displaceY = !data ? 0 : data.y - height;
+            var tierX = Math.floor(displaceX / (width / 5));
+            var tierY = Math.floor(displaceY / (height / 5));
+            return [tierX, tierY]
         };
 
         const handleGaze = (data, clock) => {
-            const dir = getDisplacement(data);
-            console.log(clock, dir);
+            var [x, y] = getDisplacement(data);
 
-            if (dir && track) {
-                if (dir === displacement && displacement === "Center" && clock - start > DWELL) {
-                    if (move) {
-                        sendCommand(state.websocket, state.uuid, processInstruction("move 1 forward"));
-                    } else {
-                        setDwell(true);
-                    }
-                }
-            } else if (dir !== "Center") {
+            if (track && Math.abs(x) < SENSITIVITY && Math.abs(y) < SENSITIVITY && clock - start > DWELL) {
+                if (move) sendCommand(state.websocket, state.uuid, processInstruction("move 1 forward"));
+                else      setDwell(true);
+            } else if (Math.abs(x) >= SENSITIVITY || Math.abs(y) >= SENSITIVITY) {
                 setDwell(false);
                 start = clock;
                 if (track) {
-                    sendCommand(state.websocket,
-                        state.uuid,
-                        processInstruction(`${(dir === "Up" || dir === "Down") ? "tilt" : "turn"} ${dir} ${TURNSPEED}`));
+                    sendCommand(state.websocket, state.uuid, processInstruction(`turn ${(x < 0) ? "left" : "right"} ${Math.abs(x)}`));
+                    sendCommand(state.websocket, state.uuid, processInstruction(`tilt ${(y < 0) ? "up" : "down"} ${Math.abs(y)}`));
                 }
             }
-            displacement = dir;
         };
 
         if (!init) {
